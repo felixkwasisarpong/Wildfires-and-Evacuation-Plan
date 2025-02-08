@@ -1,0 +1,35 @@
+# Core Python Libraries
+numpy
+pandas
+matplotlib
+seaborn
+
+# Machine Learning
+scikit-learn
+xgboost
+lightgbm
+
+# Deep Learning (if using neural networks)
+tensorflow
+torch
+transformers
+
+# Geospatial Data Processing
+geopandas
+shapely
+rasterio
+fiona
+folium
+
+# Weather & Satellite Data Retrieval
+h5py
+netCDF4
+requests
+
+# Visualization
+plotly
+opencv-python  # If working with satellite imagery
+
+# Optimization (for evacuation planning)
+networkx
+scipy
