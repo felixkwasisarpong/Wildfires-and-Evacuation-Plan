@@ -1,0 +1,21 @@
+# config.yaml
+
+gee:
+  start_date: "2000-01-01"
+  end_date: "2023-12-31"
+  region: [-125, 32, -114, 42]  # California region
+
+paths:
+  data_dir: "data/"
+  geotiff_path: "data/wildfire_data.tif"
+  hdf5_path: "data/wildfire_dataset.h5"
+  model_path: "models/unet.pth"
+
+training:
+  batch_size: 4
+  num_epochs: 10
+  learning_rate: 0.001
+
+model:
+  input_channels: 4  # Fire, NDVI, precipitation, wind, elevation
+  output_channels: 1  # Wildfire risk prediction
