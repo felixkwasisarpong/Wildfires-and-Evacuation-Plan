@@ -1,21 +1,80 @@
 # config.yaml
 
+
 gee:
-  start_date: "2000-01-01"
-  end_date: "2023-12-31"
-  region: [-125, 32, -114, 42]  # California region
+  start_date: "2012-01-01"
+  end_date: "2025-01-31"
+  region:
+    - [10.0, -12.0]   # Angola
+    - [20.0, -4.0]    # Democratic Republic of Congo
+    - [-10.0, 8.0]    # Guinea
+    - [-9.0, 8.5]     # Sierra Leone
+    - [-9.5, 6.0]     # Liberia
+    - [10.0, -12.0]   # Closing the polygon (back to Angola)
+
+
 
 paths:
   data_dir: "data/"
-  geotiff_path: "data/wildfire_data.tif"
-  hdf5_path: "data/wildfire_dataset.h5"
-  model_path: "models/unet.pth"
+  geotiff_path: "src/WildfireSpreadTS"
+  hdf5_path: "src/train"
+  model_path: "models/best_model.pth"
 
 training:
-  batch_size: 4
-  num_epochs: 10
+  model_name: "STGNN"  # Change to "ASUFM" or "ASU" as needed
+  pretrain_epochs: 10
+  num_epochs: 20
   learning_rate: 0.001
+  weight_decay: 0.0001
+  num_timesteps: 12
+  num_features: 1
+  num_classes: 2
+  inn_channels: 32
+  out_channels: 64
+  kernel_size: 3
+  dropout: 0.1
+  num_nodes: 4
+  scheduler: "cosine_annealing"
+  eta_min: 0
+  batch_size: 64
+  n_leading_observations: 1
+  crop_side_length: 128
+  load_from_hdf5: true
+  num_workers: 8
+  remove_duplicate_features: false
+  features_to_keep: null
+  n_leading_observations_test_adjustment: 5
 
-model:
-  input_channels: 4  # Fire, NDVI, precipitation, wind, elevation
-  output_channels: 1  # Wildfire risk prediction
+losses:
+  STGNN:
+    stage1: "tversky"
+    stage2: "iou"
+  ASUFM:
+    stage1: "bce"
+    stage2: "focal_tversky"
+  ASU:
+    stage1: "bce"
+    stage2: "focal_tversky"
+
+metrics:
+  - precision
+  - recall
+  - f1
+  - pr_auc
+  - dice_coefficient
+  - intersection_over_union
+
+visualizations:
+  save_plots: True
+  plot_metrics: ["loss", "pr_auc"]
+
+data:
+  hdf5_path: "data/wildfire_data.hdf5"
+  geotiff_path: "WildfireSpreadTSf"
+  normalize: True
+  clip: True
+  crop_size: 32  # Experimenting with 32x32 random cropping
+
+feature_importance:
+  method: "SHAP"
+  save_results: True
